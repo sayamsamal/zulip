@@ -1,3 +1,4 @@
+import Handlebars from "handlebars";
 import $ from "jquery";
 
 import render_add_alert_word from "../templates/settings/add_alert_word.hbs";
@@ -45,12 +46,19 @@ const alert_word_status_banner = (alert_word: string, is_error: boolean): Banner
     let label: Banner["label"];
     let intent: Banner["intent"];
     if (is_error) {
-        label = $t({defaultMessage: "Error removing alert word!"});
+        label = new Handlebars.SafeString(
+            $t_html(
+                {defaultMessage: "Error removing <z-alert-word></z-alert-word> alert word!"},
+                {"z-alert-word": () => `<b>${alert_word}</b>`},
+            ),
+        );
         intent = "danger";
     } else {
-        label = $t(
-            {defaultMessage: `Alert word "{alert_word}" removed successfully!`},
-            {alert_word},
+        label = new Handlebars.SafeString(
+            $t_html(
+                {defaultMessage: "Alert word <z-alert-word></z-alert-word> removed successfully!"},
+                {"z-alert-word": () => `<b>${alert_word}</b>`},
+            ),
         );
         intent = "success";
     }
